@@ -3,7 +3,7 @@
 #
 
 Param(
-    # 対象サイトURL
+    # Target Web URL, Create List Name, 
     [Parameter(Mandatory=$true, ParameterSetName="WebUrl")]
     [string]$webUrl,
 	[Parameter(Mandatory=$true, ParameterSetName="ListName")]
@@ -16,13 +16,14 @@ Param(
 
 $web = Get-SPWeb -Identity $webUrl
 
-# Create New Custom List
+# Check exist same name,
 $listCollection = $web.Lists
 $list = $listCollection.TryGetList($listName)
 if($list -ne $null) {
 	Write-Host "Already exists in this web"
-	# return?
+	return;
 }else{
+	
 	$listCollection.Add($listName,"Created by PowerShell",$listTemplate)
 }
 
